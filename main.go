@@ -103,7 +103,7 @@ func convertMstdnStatusToToot(s []*mastodon.Status, bluemondayPolicy *bluemonday
 		content := bluemondayPolicy.Sanitize(s[i].Content)
 		tootURL := s[i].URL
 		if s[i].Reblog != nil {
-			content = "RT " + s[i].Reblog.Account.Username + ": " + content
+			content = "RT @" + s[i].Reblog.Account.Username + ": " + content
 			tootURL = strings.TrimSuffix(tootURL, "/activity")
 		}
 		t := Toot{s[i].ID, s[i].CreatedAt, content, tootURL}
