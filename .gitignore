@@ -1,6 +1,6 @@
 # ---> Go
 # Binaries for programs and plugins
-mastodon-toots-csv
+mastodon-toots-exporter
 *.exe
 *.dll
 *.so
