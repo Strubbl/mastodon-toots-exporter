@@ -27,6 +27,14 @@ type Config struct {
 	MastodonPasswort string
 }
 
+// Toot represents a Mastodon status with only the essential parameters
+type Toot struct {
+	ID        string
+	CreatedAt string
+	Content   string
+	URL       string
+}
+
 func readConfig(path string) (config *Config) {
 	jsonFile, err := os.Open(path)
 	if err != nil {
@@ -62,8 +70,8 @@ func handleFlags() {
 		os.Exit(0)
 	}
 }
-
-func printStatuses(s []*mastodon.Status, bluemondayPolicy *bluemonday.Policy) {
+func convertMstdnStatusToToot(s []*mastodon.Status, bluemondayPolicy *bluemonday.Policy) []Toot {
+	var toots []Toot
 	for i := range s {
 		content := bluemondayPolicy.Sanitize(s[i].Content)
 		tootURL := s[i].URL
@@ -71,7 +79,15 @@ func printStatuses(s []*mastodon.Status, bluemondayPolicy *bluemonday.Policy) {
 			content = "RT " + s[i].Reblog.Account.Username + ": " + content
 			tootURL = strings.TrimSuffix(tootURL, "/activity")
 		}
-		log.Printf("%v\t%v\t%v\t%v", s[i].ID, s[i].CreatedAt, content, tootURL)
+		t := Toot{string(s[i].ID), s[i].CreatedAt.Local().String(), content, tootURL}
+		toots = append(toots, t)
+	}
+	return toots
+}
+
+func printStatuses(t []Toot) {
+	for i := range t {
+		log.Printf("%v\t%v\t%v\t%v", t[i].ID, t[i].CreatedAt, t[i].Content, t[i].URL)
 	}
 }
 
@@ -106,7 +122,7 @@ func main() {
 	}
 	// load all statuses
 	var pg mastodon.Pagination
-	var allStatuses []*mastodon.Status
+	var allStatuses []Toot
 	for {
 		log.Println("Getting followers with pg.MaxID:", pg.MaxID)
 		statuses, err := c.GetAccountStatuses(context.Background(), account.ID, &pg)
@@ -114,7 +130,8 @@ func main() {
 			log.Fatal(err)
 		}
 		log.Println("Number of new followers from this page:", len(statuses))
-		allStatuses = append(allStatuses, statuses...)
+		toots := convertMstdnStatusToToot(statuses, bluemondayPolicy)
+		allStatuses = append(allStatuses, toots...)
 		if pg.MaxID == "" || len(statuses) == 0 {
 			break
 		}
@@ -124,6 +141,6 @@ func main() {
 		break
 	}
 
-	printStatuses(allStatuses, bluemondayPolicy)
+	printStatuses(allStatuses)
 	log.Println(time.Now())
 }
