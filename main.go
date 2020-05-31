@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/mattn/go-mastodon"
@@ -65,7 +66,12 @@ func handleFlags() {
 func printStatuses(s []*mastodon.Status, bluemondayPolicy *bluemonday.Policy) {
 	for i := range s {
 		content := bluemondayPolicy.Sanitize(s[i].Content)
-		log.Printf("%v\t%v\t%v\t%v", s[i].ID, s[i].CreatedAt, content, s[i].URL)
+		tootURL := s[i].URL
+		if s[i].Reblog != nil {
+			content = "RT " + s[i].Reblog.Account.Username + ": " + content
+			tootURL = strings.TrimSuffix(tootURL, "/activity")
+		}
+		log.Printf("%v\t%v\t%v\t%v", s[i].ID, s[i].CreatedAt, content, tootURL)
 	}
 }
 
