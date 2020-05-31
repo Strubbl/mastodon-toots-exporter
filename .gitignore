@@ -17,6 +17,5 @@ mastodon-toots-exporter
 
 # project-specific
 config.json
-
-.vscode
+statuses.json
 
