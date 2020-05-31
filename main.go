@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/mattn/go-mastodon"
+	"github.com/microcosm-cc/bluemonday"
 )
 
 var configPtr = flag.String("config", "config.json", "path to config.json")
@@ -61,13 +62,10 @@ func handleFlags() {
 	}
 }
 
-func printStatuses(s []*mastodon.Status) {
+func printStatuses(s []*mastodon.Status, bluemondayPolicy *bluemonday.Policy) {
 	for i := range s {
-		// log.Printf("\t\t@%v\t%v\t%v", s[i].ID, s[i].CreatedAt, s[i].Content)
-		log.Println(s[i].ID)
-		log.Println(s[i].CreatedAt.Local())
-		log.Println(s[i].Content)
-		log.Println(s[i].URL)
+		content := bluemondayPolicy.Sanitize(s[i].Content)
+		log.Printf("%v\t%v\t%v\t%v", s[i].ID, s[i].CreatedAt, content, s[i].URL)
 	}
 }
 
@@ -78,6 +76,12 @@ func main() {
 	log.Println(startTime)
 	handleFlags()
 	config := readConfig(*configPtr)
+
+	// https://github.com/microcosm-cc/bluemonday#usage
+	// Do this once for each unique policy, and use the policy for the life of the program
+	// Policy creation/editing is not safe to use in multiple goroutines
+	bluemondayPolicy := bluemonday.StrictPolicy()
+
 	c := mastodon.NewClient(&mastodon.Config{
 		Server:       config.Server,
 		ClientID:     config.ClientID,
@@ -108,12 +112,12 @@ func main() {
 		if pg.MaxID == "" || len(statuses) == 0 {
 			break
 		}
-		// TODO find if toot has been exported already and break in that case
 		pg.SinceID = ""
 		pg.MinID = ""
+		// TODO abort if toot has been exported already
 		break
 	}
 
-	printStatuses(allStatuses)
+	printStatuses(allStatuses, bluemondayPolicy)
 	log.Println(time.Now())
 }
