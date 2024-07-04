@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/mattn/go-mastodon v0.0.8
-	github.com/microcosm-cc/bluemonday v1.0.26
+	github.com/microcosm-cc/bluemonday v1.0.27
 )
 
 require (
