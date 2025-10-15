@@ -1,6 +1,6 @@
 module github.com/Strubbl/mastodon-toots-exporter
 
-go 1.24.0
+go 1.25.2
 
 require (
 	github.com/mattn/go-mastodon v0.0.10
@@ -12,5 +12,5 @@ require (
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/tomnomnom/linkheader v0.0.0-20250811210735-e5fe3b51442e // indirect
-	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/net v0.46.0 // indirect
 )
