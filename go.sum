@@ -10,5 +10,5 @@ github.com/microcosm-cc/bluemonday v1.0.27 h1:MpEUotklkwCSLeH+Qdx1VJgNqLlpY2KXwX
 github.com/microcosm-cc/bluemonday v1.0.27/go.mod h1:jFi9vgW+H7c3V0lb6nR74Ib/DIB5OBs92Dimizgw2cA=
 github.com/tomnomnom/linkheader v0.0.0-20250811210735-e5fe3b51442e h1:tD38/4xg4nuQCASJ/JxcvCHNb46w0cdAaJfkzQOO1bA=
 github.com/tomnomnom/linkheader v0.0.0-20250811210735-e5fe3b51442e/go.mod h1:krvJ5AY/MjdPkTeRgMYbIDhbbbVvnPQPzsIsDJO8xrY=
-golang.org/x/net v0.46.0 h1:giFlY12I07fugqwPuWJi68oOnpfqFnJIJzaIIm2JVV4=
-golang.org/x/net v0.46.0/go.mod h1:Q9BGdFy1y4nkUwiLvT5qtyhAnEHgnQ/zd8PfU6nc210=
+golang.org/x/net v0.47.0 h1:Mx+4dIFzqraBXUugkia1OOvlD6LemFo1ALMHjrXDOhY=
+golang.org/x/net v0.47.0/go.mod h1:/jNxtkgq5yWUGYkaZGqo27cfGZ1c5Nen03aYrrKpVRU=
