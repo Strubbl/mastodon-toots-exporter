@@ -3,7 +3,7 @@ module github.com/Strubbl/mastodon-toots-exporter
 go 1.25.2
 
 require (
-	github.com/mattn/go-mastodon v0.0.10
+	github.com/mattn/go-mastodon v0.0.11
 	github.com/microcosm-cc/bluemonday v1.0.27
 )
 
