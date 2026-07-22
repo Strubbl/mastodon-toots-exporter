@@ -17,6 +17,6 @@ mastodon-toots-exporter
 
 # project-specific
 config.json
-statuses.json
+status*.json
 *.bak
 
